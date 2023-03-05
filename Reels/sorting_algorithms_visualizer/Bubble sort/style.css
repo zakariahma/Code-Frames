@@ -64,35 +64,6 @@ button:hover::before {
     right: 0;
 }
 
-
-/* button {
-    cursor: pointer;
-    position: relative;
-    background-color: #e5e5e5;
-    border-radius: 0.2em;
-    z-index: 1;
-    transition: all 200ms ease-in-out;
-}  */
-/* button:hover {
-    color: #fca311;
-} */
-
-/* button::before {
-    content: '';
-    position: absolute;
-    background-color: #fca311;
-    top: 95%;
-    bottom: 0;
-    left: 50%;
-    right: 50%;
-    transition: all 200ms ease-in-out;
-} */
-
-/* button:hover::before {
-    left: 0;
-    right: 0;
-} */
-
 .buttons {
     background-color: #212529;
     width: 80vw;
@@ -113,8 +84,6 @@ button:hover::before {
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
-    /* margin-bottom: 7em; */
-    
 }
 
 .logo {
@@ -125,7 +94,6 @@ button:hover::before {
     background-color: #ced4da;
     width: 10px;
     height: 10px;
-    /* transition: all 10ms ease-in-out; */
 }
 
 .bar.sorted {

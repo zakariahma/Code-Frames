@@ -13,8 +13,6 @@ function generateBars() {
         const child = document.createElement('div');
         child.classList.add('bar');
         child.style.height = `${arrayOfHeights[i]}%`;
-        // const mappedLightness = (middleColor[2] + lightnessRange) - (arrayOfHeights[i] - (middleColor[2]-lightnessRange)) * 40 / 100 + (middleColor[2] - lightnessRange);
-        // child.style.backgroundColor = `hsl(${middleColor[0]}, ${middleColor[1]}%, ${mappedLightness}%)`;
         container.appendChild(child);
     }
 }
@@ -70,6 +68,5 @@ function heightArray(min, max, nbr) {
       const j = Math.floor(Math.random() * i);
       [result[i], result[j]] = [result[j], result[i]];
   }
-
   return result;
 }
