@@ -28,7 +28,7 @@ let indexes;
 async function partition(left, right) {
   const pivotIndex = Math.floor((left + right) / 2);
   let pivot = barHeights[pivotIndex];
-  colorBars(pivotIndex, 'blue');
+  colorBars(pivotIndex, '#1985A1');
   let i = left;
   let j = right;
 
@@ -49,7 +49,7 @@ async function partition(left, right) {
     
   }
   colorBars(pivotIndex, '#ced4da');
-  displayBars();
+  // displayBars();
   indexes = [i, j];
   
 }
