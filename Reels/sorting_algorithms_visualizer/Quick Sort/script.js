@@ -1,10 +1,9 @@
 const container = document.querySelector('.container');
 const numBars = 30;
-const middleColor = [204.4,42.4,27.3]
-const lightnessRange = 10;
 
 let barElements;
 let barHeights;
+let generateButton;
 
 function generateBars() {
     while(container.firstChild) {
@@ -12,80 +11,76 @@ function generateBars() {
     }
     const arrayOfHeights = heightArray(1, 100, numBars);
     for (i=0; i < numBars; i++) {
-        // const randomHeight = Math.random()*100;
         const child = document.createElement('div');
         child.classList.add('bar');
         child.style.height = `${arrayOfHeights[i]}%`;
-        // const mappedLightness = (middleColor[2] + lightnessRange) - (arrayOfHeights[i] - (middleColor[2]-lightnessRange)) * 40 / 100 + (middleColor[2] - lightnessRange);
-        // child.style.backgroundColor = `hsl(${middleColor[0]}, ${middleColor[1]}%, ${mappedLightness}%)`;
         container.appendChild(child);
     }
-    // barElements = document.querySelectorAll('.bar');
   barElements = Array.from(document.querySelectorAll('.bar'));
   barHeights = barElements.map(bar => bar.style.height);
-  console.log(barHeights);
-
+  generateButton = document.getElementById('generate');
 }
 
 const DELAY_MS = 30;
-const generateButton = document.getElementById('generate');
-const bars = [];
+// const generateButton = document.getElementById('generate');
+let indexes;
 
-let g = 0;
+async function partition(left, right) {
+  const pivotIndex = Math.floor((left + right) / 2);
+  let pivot = barHeights[pivotIndex];
+  colorBars(pivotIndex, 'blue');
+  let i = left;
+  let j = right;
+
+  while (i <= j) {
+    while (parseFloat(barHeights[i]) < parseFloat(pivot)) {
+      i++;
+    }
+    while (parseFloat(barHeights[j]) > parseFloat(pivot)) {
+      j--;
+    }
+    if(i <= j) {
+      swapHeights(i, j);
+      i++;
+      j--;
+      displayBars();
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+  }
+  colorBars(pivotIndex, '#ced4da');
+  displayBars();
+  indexes = [i, j];
+  
+}
+
+
 
 async function sort(left = 0, right = barHeights.length - 1) {
-  generateButton.disabled = true;
-  if (left >= right) {
-    return;
+  if (left === 0 && right === barHeights.length-1) {
+    generateButton.disabled = true;
   }
-  const mid = Math.floor((left + right) / 2);
-  await sort(left, mid);
-  await sort(mid+1, right);
+  console.log(barHeights);
+  await partition(left, right);
   
-  await merge(left, mid, right);
-  generateButton.disabled = false;
-}
-
-async function merge(left, mid, right) {
-  colorBars(left, right, '#1985A1');
-  const leftLength = mid - left + 1;
-  const rightLength = right - mid;
-  const leftArr = barHeights.slice(left, mid + 1);
-  const rightArr = barHeights.slice(mid + 1, right + 1);
-  let i = 0, j = 0, k = left;
-  while(i < leftLength && j < rightLength) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    if (parseFloat(leftArr[i]) <= parseFloat(rightArr[j])) {
-      barHeights[k++] = leftArr[i++];
-    }else {
-      barHeights[k++] = rightArr[j++];
-    }
-    displayBars();
+  if (left < indexes[1]) {
+    await sort(left, indexes[1]);
   }
-
-  while(i < leftLength) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    barHeights[k++] = leftArr[i++];
-    displayBars();
+  if (indexes[0] < right) {
+    await sort(indexes[0], right);
   }
-  while(j < rightLength) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    barHeights[k++] = rightArr[j++];
-    displayBars();
-  }
-  colorBars(left, right, '#ced4da');
+  if (left === 0 && right === barHeights.length-1) {
+    // console.log(barHeights);
+    // displayBars();
+    generateButton.disabled = false;
+  } 
 }
 
 
-function swapBars(bar1, bar2) {
-  const tempHeight = bar1.style.height;
-  const tempColor = bar1.style.backgroundColor;
-
-  bar1.style.height = bar2.style.height;
-  bar1.style.backgroundColor = bar2.style.backgroundColor;
-
-  bar2.style.height = tempHeight;
-  bar2.style.backgroundColor = tempColor;
+function swapHeights(index1, index2) {
+  let tempHeight = barHeights[index1];
+  barHeights[index1] = barHeights[index2];
+  barHeights[index2] = tempHeight;
 }
 
 function heightArray(min, max, nbr) {
@@ -109,8 +104,7 @@ function displayBars() {
   }
 }
 
-function colorBars(left, right, color) {
-  for (let i = left; i < right + 1; i++) {
-    barElements[i].style.backgroundColor = color;
-  }
+function colorBars(index, color) {
+  barElements[index].style.backgroundColor = color;
 }
+
