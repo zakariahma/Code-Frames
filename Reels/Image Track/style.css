@@ -1,0 +1,25 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: black;
+    overflow: hidden;
+}
+
+#image_track {
+    display: flex;
+    gap: 4vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(0, -50%);
+
+}
+
+
+img {
+    width: 30vmin;
+    height: 56vmin;
+    object-fit: cover;
+    object-position: 100% center;
+}
